@@ -1,4 +1,4 @@
-# import modules
+'''# import modules
 from tkinter import *
 import sqlite3
 import tkinter.messagebox
@@ -123,4 +123,4 @@ root.geometry("1200x720+0+0")
 root.resizable(False, False)
 
 # end the loop
-root.mainloop()
+root.mainloop()'''
