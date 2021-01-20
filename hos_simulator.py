@@ -1,5 +1,6 @@
 # import modules
 from tkinter import *
+import datetime #날짜 생성에 필요한 패키지
 import sqlite3
 
 # 통합화면
@@ -30,13 +31,27 @@ root.mainloop()
 conn = sqlite3.connect('./manageDB.db', isolation_level=None)
 cursor = conn.cursor()
 cursor.execute('CREATE TABLE IF NOT EXISTS p_list(id INTEGER PRIMARY KEY AUTOINCREMENT, \
-    pname text, pbirth text, psex text, psym text)')
+    pname text, pbirth text, psex text, psym text, pdate text)')
+
+# 현재 시점의 날짜
+now = datetime.datetime.now()
+nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
 
 # 접수처 (오른쪽 아래 화면)
 
 
 # 예약자 목록 TV화면 (오른쪽 위 화면)
+# 임시 환자
+ppList=(
+    ('Park', '19990124', '남자', '알레르기', nowDatetime),
+    ('Cho', '19681211', '여자', '편두통', nowDatetime),
+    ('An', '19880507', '여자', '외상', nowDatetime),
+    ('JY', '19991211', '여자', '두통', nowDatetime),
+)
+cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
+    VALUES(?,?,?,?,?)", ppList)
 
+conn.close()
 
 # 진료 상황 시뮬레이터 (왼쪽 화면)
 
