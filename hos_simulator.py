@@ -1,6 +1,7 @@
 # import modules
 from tkinter import *
 import datetime #날짜 생성에 필요한 패키지
+import tkinter.messagebox as msgbox #msgbox 사용을 위한 패키지
 import sqlite3
 
 # 통합화면
@@ -25,8 +26,6 @@ tv.pack(fill="both")
 hos_lobby = Frame(root, width=700, height=600 ,bg='BLUE')
 hos_lobby.pack(side=LEFT, fill="both", expand=True)
 
-root.mainloop()
-
 # DB 생성
 conn = sqlite3.connect('./manageDB.db', isolation_level=None)
 cursor = conn.cursor()
@@ -37,11 +36,34 @@ cursor.execute('CREATE TABLE IF NOT EXISTS p_list(id INTEGER PRIMARY KEY AUTOINC
 now = datetime.datetime.now()
 nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
 
-# 접수처 (오른쪽 아래 화면)
+################ 접수처 (오른쪽 아래 화면)
+# 접수처 라벨
+reception_label = Label(reception, text="<접수처>", font = ('arial 18 bold',16))
+reception_label.place(x=200, y=10)
+
+# 예약 정보 입력 라벨 및 텍스트 공간
+info_label1 = Label(reception, text="성명", font = ('arial 18 bold',12))
+info_text1 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label1.place(x=30, y=60)
+info_text1.place(x=100, y=62)
+info_label2 = Label(reception, text="생년월일", font = ('arial 18 bold',12))
+info_text2 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label2.place(x=20, y=90)
+info_text2.place(x=100, y=92)
+info_label3 = Label(reception, text="성별", font = ('arial 18 bold',12))
+info_text3 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label3.place(x=30, y=120)
+info_text3.place(x=100, y=122)
+info_label4 = Label(reception, text="증상", font = ('arial 18 bold',12))
+info_text4 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label4.place(x=30, y=150)
+info_text4.place(x=100, y=152)
 
 
 # 예약자 목록 TV화면 (오른쪽 위 화면)
+
 # 임시 환자
+'''
 ppList=(
     ('Park', '19990124', '남자', '알레르기', nowDatetime),
     ('Cho', '19681211', '여자', '편두통', nowDatetime),
@@ -50,9 +72,11 @@ ppList=(
 )
 cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
     VALUES(?,?,?,?,?)", ppList)
-
+'''
 conn.close()
 
 # 진료 상황 시뮬레이터 (왼쪽 화면)
 
 
+
+root.mainloop()
