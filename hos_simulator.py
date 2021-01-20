@@ -26,6 +26,12 @@ hos_lobby.pack(side=LEFT, fill="both", expand=True)
 
 root.mainloop()
 
+# DB 생성
+conn = sqlite3.connect('./manageDB.db', isolation_level=None)
+cursor = conn.cursor()
+cursor.execute('CREATE TABLE IF NOT EXISTS p_list(id INTEGER PRIMARY KEY AUTOINCREMENT, \
+    pname text, pbirth text, psex text, psym text)')
+
 # 접수처 (오른쪽 아래 화면)
 
 
