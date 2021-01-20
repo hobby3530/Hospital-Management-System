@@ -59,6 +59,34 @@ info_text4 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY
 info_label4.place(x=30, y=150)
 info_text4.place(x=100, y=152)
 
+def tickbtn():
+    info_text1.config(state='normal', bg='WHITE')
+    info_text2.config(state='normal', bg='WHITE')
+    info_text3.config(state='normal', bg='WHITE')
+    info_text4.config(state='normal', bg='WHITE')
+def chkbtn():
+    getinfo1 = info_text1.get("1.0", END).replace('\n', '')
+    getinfo2 = info_text2.get("1.0", END).replace('\n', '')
+    getinfo3 = info_text3.get("1.0", END).replace('\n', '')
+    getinfo4 = info_text4.get("1.0", END).replace('\n', '')
+    if getinfo1=='' or getinfo2=='' or  getinfo3=='' or  getinfo4=='':
+        msgbox.showwarning("주의", "모든 정보를 입력해주세요.")
+    else:
+        print(getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime)
+        cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", (getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime))
+
+# 티켓 버튼
+photo_ticket = PhotoImage(file='./image/ticket.png')
+ticket_Button = Button(reception, image=photo_ticket, width=130, height=145, command=tickbtn)
+ticket_Button.place(x=350, y=30)
+
+# recep_count = cursor.execute("SELECT COUNT(*) FROM p_list")
+
+# 체크 버튼
+photo_check = PhotoImage(file='./image/check.png')
+ticket_Button = Button(reception, image=photo_check, width=55, height=50, command=chkbtn)
+ticket_Button.place(x=275, y=120)
+
 
 # 예약자 목록 TV화면 (오른쪽 위 화면)
 
