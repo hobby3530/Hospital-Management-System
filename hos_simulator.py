@@ -25,8 +25,6 @@ tv.pack(fill="both")
 hos_lobby = Frame(root, width=700, height=600 ,bg='BLUE')
 hos_lobby.pack(side=LEFT, fill="both", expand=True)
 
-root.mainloop()
-
 # DB 생성
 conn = sqlite3.connect('./manageDB.db', isolation_level=None)
 cursor = conn.cursor()
@@ -46,13 +44,29 @@ ppList=(
     ('Park', '19990124', '남자', '알레르기', nowDatetime),
     ('Cho', '19681211', '여자', '편두통', nowDatetime),
     ('An', '19880507', '여자', '외상', nowDatetime),
-    ('JY', '19991211', '여자', '두통', nowDatetime),
+    #('JY', '19991211', '여자', '두통', nowDatetime),
 )
-cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
-    VALUES(?,?,?,?,?)", ppList)
+#cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
+#    VALUES(?,?,?,?,?)", ppList)
 
-conn.close()
+#cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
+#    VALUES(?,?,?,?,?)", ('Lee', '20000101', '남자', '화상', nowDatetime))
+
+
+wait_list1 = Label(tv, text = "대기번호", font = ('arial 18 bold'))
+wait_list1.place(x=70, y=45)
+
+wait_list1 = Label(tv, text = "이름", font = ('arial 18 bold'))
+wait_list1.place(x=185, y=45)
+
+wait_list1 = Label(tv, text = "성별", font = ('arial 18 bold'))
+wait_list1.place(x=260, y=45)
+
+wait_list1 = Label(tv, text = "증상", font = ('arial 18 bold'))
+wait_list1.place(x=340, y=45)
+
 
 # 진료 상황 시뮬레이터 (왼쪽 화면)
 
-
+conn.close()
+root.mainloop()
