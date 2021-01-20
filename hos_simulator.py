@@ -64,16 +64,17 @@ def tickbtn():
     info_text2.config(state='normal', bg='WHITE')
     info_text3.config(state='normal', bg='WHITE')
     info_text4.config(state='normal', bg='WHITE')
+
 def chkbtn():
     getinfo1 = info_text1.get("1.0", END).replace('\n', '')
     getinfo2 = info_text2.get("1.0", END).replace('\n', '')
     getinfo3 = info_text3.get("1.0", END).replace('\n', '')
     getinfo4 = info_text4.get("1.0", END).replace('\n', '')
-    if getinfo1=='' or getinfo2=='' or  getinfo3=='' or  getinfo4=='':
+    if getinfo1=='' or getinfo2=='' or  getinfo3=='' or getinfo4=='':
         msgbox.showwarning("주의", "모든 정보를 입력해주세요.")
-    else:
-        print(getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime)
-        cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", (getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime))
+    # else:
+    #     cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", ('a', 'b', 'c', 'd', nowDatetime))
+    #### 에러 발생
 
 # 티켓 버튼
 photo_ticket = PhotoImage(file='./image/ticket.png')
