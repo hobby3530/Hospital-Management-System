@@ -203,14 +203,15 @@ def make_lb():
 
 def update_db():
     cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
+
+    #최대 대기인원 max
     global max
-    max -= 1
+    max -= 1    #삭제시 감소
     make_lb()
     
     #랜덤진료시간 생성
     doctor_time = random.randrange(5000, 7000)
 
-    #최대 대기인원 max
     max += 1
     if max < 6:
         #print("{} 실행".format(doctor_time))
