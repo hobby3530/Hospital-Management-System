@@ -2,6 +2,7 @@
 from tkinter import *
 import datetime #날짜 생성에 필요한 패키지
 import tkinter.messagebox as msgbox #msgbox 사용을 위한 패키지
+import winsound #효과음 출력에 필요한 패키지
 import sqlite3
 import random
 import time
@@ -42,6 +43,38 @@ max = 0
 # 현재 시점의 날짜
 now = datetime.datetime.now()
 nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
+
+
+
+######### 진료 상황 시뮬레이터 (왼쪽 화면)
+photodoor = PhotoImage(file='./image/door.png')
+door = Label(hos_lobby, image=photodoor, width=450, height=300, bg='BLANCHEDALMOND')
+door.place(x=100, y=0)
+
+photoboard = PhotoImage(file='./image/billboard.png')
+board = Label(hos_lobby, image=photoboard, width=170, height=150, bg='BLANCHEDALMOND')
+board.place(x=490, y=220)
+
+photohuman = PhotoImage(file='./image/human.png')
+human = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+human.place(x=200, y=430)
+
+photoch = PhotoImage(file='./image/ch1.png')
+ch1 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch1.place(x=200, y=480)
+ch2 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch2.place(x=330, y=480)
+ch3 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch3.place(x=460, y=480)
+
+# 안내 전광판
+def infocon(name):
+    inform_label.config(text = "\n"+name+" 님\n들어오세요.\n", font = ('arial 18 bold', 14))
+    winsound.PlaySound('./sound/ddo.wav', winsound.SND_FILENAME)
+inform_label = Label(board, text='', width=14, height=4, bg='SKYBLUE', font = ('arial 18 bold',14))
+inform_label.place(x=13, y=28)
+
+
 
 ################ 접수처 (오른쪽 아래 화면)
 # 접수처 라벨
@@ -208,45 +241,28 @@ def make_lb():
             break
 
 def update_db():
+    #최대 대기인원 max
     global max
+
+    if max > 1:
+        infocon(patients[1])
+    else:
+        inform_label.config(text='')
+
+    #랜덤진료시간 생성
+    doctor_time = random.randrange(5000, 6000)
+
     if not max==0:
         cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
         max -= 1
+        
     make_lb()
-
-    #최대 대기인원 max
     
-    # max -= 1    #삭제시 감소
-    # make_lb()
-    
-    #랜덤진료시간 생성
-    doctor_time = random.randrange(10000, 11000)
     if max < 7:
         #print("{} 실행".format(doctor_time))
         tv.after(doctor_time, update_db)
     
 update_db()
-
-####### 진료 상황 시뮬레이터 (왼쪽 화면)
-photodoor = PhotoImage(file='./image/door.png')
-door = Label(hos_lobby, image=photodoor, width=450, height=300, bg='BLANCHEDALMOND')
-door.place(x=100, y=0)
-
-photoboard = PhotoImage(file='./image/billboard.png')
-ch1 = Label(hos_lobby, image=photoboard, width=170, height=150, bg='BLANCHEDALMOND')
-ch1.place(x=490, y=220)
-
-photohuman = PhotoImage(file='./image/human.png')
-human = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
-human.place(x=200, y=430)
-
-photoch = PhotoImage(file='./image/ch1.png')
-ch1 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
-ch1.place(x=200, y=480)
-ch2 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
-ch2.place(x=330, y=480)
-ch3 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
-ch3.place(x=460, y=480)
 
 
 root.mainloop()
