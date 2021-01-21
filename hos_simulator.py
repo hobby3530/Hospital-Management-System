@@ -1,12 +1,13 @@
 # import modules
 from tkinter import *
 import datetime #날짜 생성에 필요한 패키지
+import tkinter.messagebox as msgbox #msgbox 사용을 위한 패키지
 import sqlite3
 import random
 import time
 import threading
 
-# 통합화면
+####### 통합화면
 root = Tk()
 root.geometry("1200x600+0+0")
 
@@ -38,11 +39,70 @@ cursor.execute('CREATE TABLE IF NOT EXISTS p_list(id INTEGER PRIMARY KEY AUTOINC
 now = datetime.datetime.now()
 nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
 
-# 접수처 (오른쪽 아래 화면)
+################ 접수처 (오른쪽 아래 화면)
+# 접수처 라벨
+reception_label = Label(reception, text="<접수처>", font = ('arial 18 bold',16))
+reception_label.place(x=200, y=10)
 
+# 예약 정보 입력 라벨 및 텍스트 공간
+info_label1 = Label(reception, text="성명", font = ('arial 18 bold',12))
+info_text1 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label1.place(x=30, y=60)
+info_text1.place(x=100, y=62)
+info_label2 = Label(reception, text="생년월일", font = ('arial 18 bold',12))
+info_text2 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label2.place(x=20, y=90)
+info_text2.place(x=100, y=92)
+info_label3 = Label(reception, text="성별", font = ('arial 18 bold',12))
+info_text3 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label3.place(x=30, y=120)
+info_text3.place(x=100, y=122)
+info_label4 = Label(reception, text="증상", font = ('arial 18 bold',12))
+info_text4 = Text(reception, width=23, height=1, state='disabled', bg='LIGHTGRAY')
+info_label4.place(x=30, y=150)
+info_text4.place(x=100, y=152)
 
-# 예약자 목록 TV화면 (오른쪽 위 화면)
+def tickbtn():
+    bb = cursor.execute("SELECT COUNT(*) FROM p_list")
+    vv = Label(ticket_Button, text="대기인원\n"+str(list(bb)[0][0]))
+    vv.place(x=16, y=50)
+    info_text1.config(state='normal', bg='WHITE')
+    info_text2.config(state='normal', bg='WHITE')
+    info_text3.config(state='normal', bg='WHITE')
+    info_text4.config(state='normal', bg='WHITE')
+
+def chkbtn():
+    getinfo1 = info_text1.get("1.0", END).replace('\n', '')
+    getinfo2 = info_text2.get("1.0", END).replace('\n', '')
+    getinfo3 = info_text3.get("1.0", END).replace('\n', '')
+    getinfo4 = info_text4.get("1.0", END).replace('\n', '')
+    if getinfo1=='' or getinfo2=='' or  getinfo3=='' or getinfo4=='':
+        msgbox.showwarning("주의", "모든 정보를 입력해주세요.")
+    else:
+        cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", (getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime))
+        info_text1.config(state='disabled', bg='LIGHTGRAY')
+        info_text2.config(state='disabled', bg='LIGHTGRAY')
+        info_text3.config(state='disabled', bg='LIGHTGRAY')
+        info_text4.config(state='disabled', bg='LIGHTGRAY')
+
+# 티켓 버튼
+photo_ticket = PhotoImage(file='./image/ticket.png')
+ticket_Button = Button(reception, image=photo_ticket, width=130, height=145, command=tickbtn)
+ticket_Button.place(x=350, y=30)
+
+# recep_count = cursor.execute("SELECT COUNT(*) FROM p_list")
+# recep_label = Label(ticket_Button, text="대기인원\n"+str(list(recep_count)[0][0]))
+# recep_label.place(x=16, y=50)
+
+# 체크 버튼
+photo_check = PhotoImage(file='./image/check.png')
+check_Button = Button(reception, image=photo_check, width=55, height=50, command=chkbtn)
+check_Button.place(x=275, y=120)
+
+########## 예약자 목록 TV화면 (오른쪽 위 화면)
+
 # 임시 환자 리스트 삽입
+
 ppList=(
     ('Park', '19990124', '남자', '알레르기', nowDatetime),
     ('Cho', '19681211', '여자', '편두통', nowDatetime),
@@ -51,6 +111,7 @@ ppList=(
 )
 cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
     VALUES(?,?,?,?,?)", ppList)
+
 
 cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
     VALUES(?,?,?,?,?)", ('Lee', '20000101', '남자', '화상', nowDatetime))
@@ -62,10 +123,10 @@ hurt = []
 
 sql = "SELECT * FROM p_list"
 res = cursor.execute(sql)
-count = 0
 max = 0
 
 for r in res:
+    count = 0
     count += 1
     ids = r[0]
     names = r[1]
@@ -129,7 +190,7 @@ def update_db():
         gen_list.place(x=265, y=60+count*30)
         hurt_list = Label(tv, text = hurts, width=7, font = ('arial 16'))
         hurt_list.place(x=330, y=60+count*30)
-        if count > 7:
+        if count > 5:
             break
     print(id_list[0], names)
     cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
@@ -146,7 +207,9 @@ def update_db():
     
 update_db()
 
-# 진료 상황 시뮬레이터 (왼쪽 화면)
+
+####### 진료 상황 시뮬레이터 (왼쪽 화면)
+
 
 
 root.mainloop()
