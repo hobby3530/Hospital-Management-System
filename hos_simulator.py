@@ -1,14 +1,14 @@
 # import modules
 from tkinter import *
-import datetime #날짜 생성에 필요한 패키지
-import tkinter.messagebox as msgbox #msgbox 사용을 위한 패키지
-import winsound #효과음 출력에 필요한 패키지
+import datetime                         #날짜 생성에 필요한 패키지
+import tkinter.messagebox as msgbox     #msgbox 사용을 위한 패키지
+import winsound                         #효과음 출력에 필요한 패키지
 import sqlite3
 import random
 import time
 import threading
 
-####### 통합화면
+################# 통합화면
 root = Tk()
 root.geometry("1200x600+0+0")
 
@@ -44,7 +44,7 @@ max = 0
 now = datetime.datetime.now()
 nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
 
-####### 진료 상황 시뮬레이터 (왼쪽 화면)
+############## 진료 상황 시뮬레이터 (왼쪽 화면)
 # GUI 디자인 및 배치
 photoboard = PhotoImage(file='./image/billboard.png')
 board = Label(hos_lobby, image=photoboard, width=170, height=150, bg='BLANCHEDALMOND')
@@ -70,7 +70,7 @@ ch3 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
 ch3.place(x=460, y=480)
 
 photodoor = PhotoImage(file='./image/door.png')
-photodoor2 = PhotoImage(file='./image/door2.png')   #사람있는사진
+photodoor2 = PhotoImage(file='./image/door2.png')
 door = Label(hos_lobby, image=photodoor, width=450, height=300, bg='BLANCHEDALMOND')
 door.place(x=40, y=0)
 
@@ -78,47 +78,24 @@ def wait_seat():
     if max == 1:
         door.config(image = photodoor2)
         human2.place(x=200, y=50)
-        human3.place(x=200, y=50)
-        human4.place(x=200, y=50)
-        human5.place(x=200, y=50)
-        human6.place(x=200, y=50)
     elif max == 2:
         human2.place(x=265, y=430)
         human3.place(x=200, y=50)
-        human4.place(x=200, y=50)
-        human5.place(x=200, y=50)
-        human6.place(x=200, y=50)
     elif max == 3:
-        human2.place(x=265, y=430)
         human3.place(x=340, y=430)
         human4.place(x=200, y=50)
-        human5.place(x=200, y=50)
-        human6.place(x=200, y=50)
     elif max == 4:
-        human2.place(x=265, y=430)
-        human3.place(x=340, y=430)
         human4.place(x=395, y=430)
         human5.place(x=200, y=50)
-        human6.place(x=200, y=50)
     elif max == 5:
-        human2.place(x=265, y=430)
-        human3.place(x=340, y=430)
-        human4.place(x=395, y=430)
         human5.place(x=470, y=430)
         human6.place(x=200, y=50)
     elif max == 6:
-        human2.place(x=265, y=430)
-        human3.place(x=340, y=430)
-        human4.place(x=395, y=430)
         human5.place(x=470, y=430)
         human6.place(x=525, y=430)
     else:
         door.config(image = photodoor)
         human2.place(x=200, y=50)
-        human3.place(x=200, y=50)
-        human4.place(x=200, y=50)
-        human5.place(x=200, y=50)
-        human6.place(x=200, y=50)
 
 # 안내 전광판
 def infocon(name):
@@ -190,32 +167,12 @@ photo_ticket = PhotoImage(file='./image/ticket.png')
 ticket_Button = Button(reception, image=photo_ticket, width=130, height=145, command=tickbtn)
 ticket_Button.place(x=350, y=30)
 
-# recep_count = cursor.execute("SELECT COUNT(*) FROM p_list")
-# recep_label = Label(ticket_Button, text="대기인원\n"+str(list(recep_count)[0][0]))
-# recep_label.place(x=16, y=50)
-
 # 체크 버튼
 photo_check = PhotoImage(file='./image/check.png')
 check_Button = Button(reception, image=photo_check, width=55, height=50, command=chkbtn)
 check_Button.place(x=275, y=120)
 
 ########## 예약자 목록 TV화면 (오른쪽 위 화면)
-
-# 임시 환자 리스트 삽입
-'''
-ppList=(
-    ('Park', '19990124', '남자', '알레르기', nowDatetime),
-    ('Cho', '19681211', '여자', '편두통', nowDatetime),
-    ('An', '19880507', '여자', '외상', nowDatetime),
-    ('JY', '19991211', '여자', '두통', nowDatetime),
-)
-cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
-    VALUES(?,?,?,?,?)", ppList)
-
-
-cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
-    VALUES(?,?,?,?,?)", ('Lee', '20000101', '남자', '화상', nowDatetime))
-'''
 id_list = []
 patients = []
 gender = []
@@ -233,6 +190,7 @@ for r in res:
     names = r[1]
     gens = r[3]
     hurts = r[4]
+    
     id_list.append(ids)
     patients.append(names)
     gender.append(gens)
@@ -263,6 +221,7 @@ def make_lb():
 
     wait_list1 = Label(tv, text = "증상", font = ('arial 18 bold'))
     wait_list1.place(x=345, y=45)
+
     #리스트 초기화
     id_list.clear()
     patients.clear()
@@ -278,10 +237,12 @@ def make_lb():
         names = r[1]
         gens = r[3]
         hurts = r[4]
+
         id_list.append(ids)
         patients.append(names)
         gender.append(gens)
         hurt.append(hurts)
+
         num_list = Label(tv, text = count, font = ('arial 16 bold'))
         num_list.place(x=145, y=60+count*30)
         name_list = Label(tv, text = names, width=5, font = ('arial 16'))
@@ -314,7 +275,6 @@ def update_db():
     make_lb()
     
     if max < 7:
-        #print("{} 실행".format(doctor_time))
         tv.after(doctor_time, update_db)
 update_db()
 
