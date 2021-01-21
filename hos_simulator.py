@@ -49,11 +49,11 @@ ppList=(
     ('An', '19880507', '여자', '외상', nowDatetime),
     ('JY', '19991211', '여자', '두통', nowDatetime),
 )
-#cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
-#    VALUES(?,?,?,?,?)", ppList)
+cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
+    VALUES(?,?,?,?,?)", ppList)
 
-#cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
-#    VALUES(?,?,?,?,?)", ('Lee', '20000101', '남자', '화상', nowDatetime))
+cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
+    VALUES(?,?,?,?,?)", ('Lee', '20000101', '남자', '화상', nowDatetime))
 
 id_list = []
 patients = []
@@ -77,7 +77,7 @@ for r in res:
     hurt.append(hurts)
 
     num_list = Label(tv, text = count, font = ('arial 16 bold'))
-    num_list.place(x=110, y=60+count*30)
+    num_list.place(x=145, y=60+count*30)
     name_list = Label(tv, text = names, font = ('arial 16'))
     name_list.place(x=190, y=60+count*30)
     gen_list = Label(tv, text = gens, font = ('arial 16'))
@@ -87,17 +87,20 @@ for r in res:
 
 def update_db():
     #기본 출력라벨 생성
+    doc_ing = Label(tv, text = "진료중", font = ('arial 10 bold'), fg = 'red')
+    doc_ing.place(x=85, y=93)
+
     wait_list1 = Label(tv, text = "대기번호", font = ('arial 18 bold'))
-    wait_list1.place(x=70, y=45)
+    wait_list1.place(x=80, y=45)
 
     wait_list1 = Label(tv, text = "이름", font = ('arial 18 bold'))
-    wait_list1.place(x=185, y=45)
+    wait_list1.place(x=195, y=45)
 
     wait_list1 = Label(tv, text = "성별", font = ('arial 18 bold'))
-    wait_list1.place(x=260, y=45)
+    wait_list1.place(x=265, y=45)
 
     wait_list1 = Label(tv, text = "증상", font = ('arial 18 bold'))
-    wait_list1.place(x=340, y=45)
+    wait_list1.place(x=345, y=45)
 
     #리스트 초기화
     id_list.clear()
@@ -119,7 +122,7 @@ def update_db():
         gender.append(gens)
         hurt.append(hurts)
         num_list = Label(tv, text = count, font = ('arial 16 bold'))
-        num_list.place(x=110, y=60+count*30)
+        num_list.place(x=145, y=60+count*30)
         name_list = Label(tv, text = names, width=5, font = ('arial 16'))
         name_list.place(x=190, y=60+count*30)
         gen_list = Label(tv, text = gens, width=4, font = ('arial 16'))
