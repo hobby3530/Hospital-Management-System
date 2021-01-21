@@ -35,6 +35,10 @@ cursor = conn.cursor()
 cursor.execute('CREATE TABLE IF NOT EXISTS p_list(id INTEGER PRIMARY KEY AUTOINCREMENT, \
     pname text, pbirth text, psex text, psym text, pdate text)')
 
+cursor.execute("DELETE FROM p_list")
+global max
+max = 0
+
 # 현재 시점의 날짜
 now = datetime.datetime.now()
 nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
@@ -67,7 +71,7 @@ def tickbtn():
     res = cursor.execute(sql)
     wait_label = Label(ticket_Button, text="대기인원\n"+str(list(res)[0][0]))
     wait_label.place(x=16, y=50)
-    if int(list(cursor.execute(sql))[0][0]) > 6:
+    if int(list(cursor.execute(sql))[0][0]) > 5:
         msgbox.showwarning("주의", "대기 인원이 가득 차 예약할 수 없습니다.")
     else:
         info_text1.config(state='normal', bg='WHITE')
@@ -84,6 +88,8 @@ def chkbtn():
         msgbox.showwarning("주의", "모든 정보를 입력해주세요.")
     else:
         cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", (getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime))
+        global max
+        max += 1
         make_lb()
         info_text1.delete("1.0", END)
         info_text2.delete("1.0", END)
@@ -202,18 +208,20 @@ def make_lb():
             break
 
 def update_db():
-    cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
+    global max
+    if not max==0:
+        cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
+        max -= 1
+    make_lb()
 
     #최대 대기인원 max
-    global max
-    max -= 1    #삭제시 감소
-    make_lb()
+    
+    # max -= 1    #삭제시 감소
+    # make_lb()
     
     #랜덤진료시간 생성
-    doctor_time = random.randrange(5000, 7000)
-
-    max += 1
-    if max < 6:
+    doctor_time = random.randrange(10000, 11000)
+    if max < 7:
         #print("{} 실행".format(doctor_time))
         tv.after(doctor_time, update_db)
     
