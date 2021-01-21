@@ -26,7 +26,7 @@ right_top.pack(side=TOP, fill="both", expand=True)
 tv = Label(right_top, image=photo2, width=500, height=400)
 tv.pack(fill="both")
 
-hos_lobby = Frame(root, width=700, height=600 ,bg='BLUE')
+hos_lobby = Frame(root, width=700, height=600 ,bg='BLANCHEDALMOND')
 hos_lobby.pack(side=LEFT, fill="both", expand=True)
 
 # DB 생성
@@ -227,8 +227,26 @@ def update_db():
     
 update_db()
 
-
 ####### 진료 상황 시뮬레이터 (왼쪽 화면)
+photodoor = PhotoImage(file='./image/door.png')
+door = Label(hos_lobby, image=photodoor, width=450, height=300, bg='BLANCHEDALMOND')
+door.place(x=100, y=0)
+
+photoboard = PhotoImage(file='./image/billboard.png')
+ch1 = Label(hos_lobby, image=photoboard, width=170, height=150, bg='BLANCHEDALMOND')
+ch1.place(x=490, y=220)
+
+photohuman = PhotoImage(file='./image/human.png')
+human = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+human.place(x=200, y=430)
+
+photoch = PhotoImage(file='./image/ch1.png')
+ch1 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch1.place(x=200, y=480)
+ch2 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch2.place(x=330, y=480)
+ch3 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch3.place(x=460, y=480)
 
 
 root.mainloop()
