@@ -75,7 +75,6 @@ def tickbtn():
         info_text3.config(state='normal', bg='WHITE')
         info_text4.config(state='normal', bg='WHITE')
     
-
 def chkbtn():
     getinfo1 = info_text1.get("1.0", END).replace('\n', '')
     getinfo2 = info_text2.get("1.0", END).replace('\n', '')
@@ -178,7 +177,6 @@ def make_lb():
     gender.clear()
     hurt.clear()
 
-
     #DB의 대기환자 출력
     count = 0
     res = cursor.execute("SELECT * FROM p_list")
@@ -204,15 +202,15 @@ def make_lb():
             break
 
 def update_db():
-    
     cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
+    global max
+    max -= 1
     make_lb()
     
     #랜덤진료시간 생성
-    doctor_time = random.randrange(8000, 10000)
+    doctor_time = random.randrange(5000, 7000)
 
     #최대 대기인원 max
-    global max
     max += 1
     if max < 6:
         #print("{} 실행".format(doctor_time))
@@ -222,7 +220,6 @@ update_db()
 
 
 ####### 진료 상황 시뮬레이터 (왼쪽 화면)
-
 
 
 root.mainloop()
