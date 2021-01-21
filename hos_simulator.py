@@ -41,7 +41,7 @@ nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
 
 ################ 접수처 (오른쪽 아래 화면)
 # 접수처 라벨
-reception_label = Label(reception, text="<접수처>", font = ('arial 18 bold',16))
+reception_label = Label(reception, text="<접수처>", font = ('arial 18 bold'))
 reception_label.place(x=200, y=10)
 
 # 예약 정보 입력 라벨 및 텍스트 공간
@@ -63,13 +63,18 @@ info_label4.place(x=30, y=150)
 info_text4.place(x=100, y=152)
 
 def tickbtn():
-    bb = cursor.execute("SELECT COUNT(*) FROM p_list")
-    vv = Label(ticket_Button, text="대기인원\n"+str(list(bb)[0][0]))
-    vv.place(x=16, y=50)
-    info_text1.config(state='normal', bg='WHITE')
-    info_text2.config(state='normal', bg='WHITE')
-    info_text3.config(state='normal', bg='WHITE')
-    info_text4.config(state='normal', bg='WHITE')
+    sql = "SELECT COUNT(*) FROM p_list"
+    res = cursor.execute(sql)
+    wait_label = Label(ticket_Button, text="대기인원\n"+str(list(res)[0][0]))
+    wait_label.place(x=16, y=50)
+    if int(list(cursor.execute(sql))[0][0]) > 6:
+        msgbox.showwarning("주의", "대기 인원이 가득 차 예약할 수 없습니다.")
+    else:
+        info_text1.config(state='normal', bg='WHITE')
+        info_text2.config(state='normal', bg='WHITE')
+        info_text3.config(state='normal', bg='WHITE')
+        info_text4.config(state='normal', bg='WHITE')
+    
 
 def chkbtn():
     getinfo1 = info_text1.get("1.0", END).replace('\n', '')
@@ -80,6 +85,11 @@ def chkbtn():
         msgbox.showwarning("주의", "모든 정보를 입력해주세요.")
     else:
         cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", (getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime))
+        make_lb()
+        info_text1.delete("1.0", END)
+        info_text2.delete("1.0", END)
+        info_text3.delete("1.0", END)
+        info_text4.delete("1.0", END)
         info_text1.config(state='disabled', bg='LIGHTGRAY')
         info_text2.config(state='disabled', bg='LIGHTGRAY')
         info_text3.config(state='disabled', bg='LIGHTGRAY')
@@ -102,7 +112,7 @@ check_Button.place(x=275, y=120)
 ########## 예약자 목록 TV화면 (오른쪽 위 화면)
 
 # 임시 환자 리스트 삽입
-
+'''
 ppList=(
     ('Park', '19990124', '남자', '알레르기', nowDatetime),
     ('Cho', '19681211', '여자', '편두통', nowDatetime),
@@ -115,7 +125,7 @@ cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
 
 cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
     VALUES(?,?,?,?,?)", ('Lee', '20000101', '남자', '화상', nowDatetime))
-
+'''
 id_list = []
 patients = []
 gender = []
@@ -125,6 +135,7 @@ sql = "SELECT * FROM p_list"
 res = cursor.execute(sql)
 max = 0
 
+#기본 출력라벨 생성
 for r in res:
     count = 0
     count += 1
@@ -146,8 +157,7 @@ for r in res:
     hurt_list = Label(tv, text = hurts, font = ('arial 16'))
     hurt_list.place(x=330, y=60+count*30)
 
-def update_db():
-    #기본 출력라벨 생성
+def make_lb():
     doc_ing = Label(tv, text = "진료중", font = ('arial 10 bold'), fg = 'red')
     doc_ing.place(x=85, y=93)
 
@@ -162,12 +172,12 @@ def update_db():
 
     wait_list1 = Label(tv, text = "증상", font = ('arial 18 bold'))
     wait_list1.place(x=345, y=45)
-
     #리스트 초기화
     id_list.clear()
     patients.clear()
     gender.clear()
     hurt.clear()
+
 
     #DB의 대기환자 출력
     count = 0
@@ -192,17 +202,20 @@ def update_db():
         hurt_list.place(x=330, y=60+count*30)
         if count > 5:
             break
-    print(id_list[0], names)
+
+def update_db():
+    
     cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
+    make_lb()
     
     #랜덤진료시간 생성
-    doctor_time = random.randrange(2000, 10000)
+    doctor_time = random.randrange(8000, 10000)
 
     #최대 대기인원 max
     global max
     max += 1
     if max < 6:
-        print("{} 실행".format(doctor_time))
+        #print("{} 실행".format(doctor_time))
         tv.after(doctor_time, update_db)
     
 update_db()
