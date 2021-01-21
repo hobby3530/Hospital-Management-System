@@ -43,6 +43,83 @@ max = 0
 now = datetime.datetime.now()
 nowDatetime=now.strftime('%Y-%m-%d %H:%M:%S')
 
+####### 진료 상황 시뮬레이터 (왼쪽 화면)
+# GUI 디자인 및 배치
+photoboard = PhotoImage(file='./image/billboard.png')
+ch1 = Label(hos_lobby, image=photoboard, width=170, height=150, bg='BLANCHEDALMOND')
+ch1.place(x=490, y=220)
+
+hos_sym = PhotoImage(file='./image/hos_symbol.png')
+ch2 = Label(hos_lobby, image=hos_sym, width=170, height=150, bg='BLANCHEDALMOND')
+ch2.place(x=490, y=0)
+
+photohuman = PhotoImage(file='./image/human.png')
+human2 = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+human3 = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+human4 = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+human5 = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+human6 = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
+
+photoch = PhotoImage(file='./image/ch1.png')
+ch1 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch1.place(x=200, y=480)
+ch2 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch2.place(x=330, y=480)
+ch3 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
+ch3.place(x=460, y=480)
+
+photodoor = PhotoImage(file='./image/door.png')
+photodoor2 = PhotoImage(file='./image/door2.png')   #사람있는사진
+door = Label(hos_lobby, image=photodoor, width=450, height=300, bg='BLANCHEDALMOND')
+door.place(x=40, y=0)
+
+def wait_seat():
+    if max == 1:
+        door.config(image = photodoor2)
+        human2.place(x=200, y=50)
+        human3.place(x=200, y=50)
+        human4.place(x=200, y=50)
+        human5.place(x=200, y=50)
+        human6.place(x=200, y=50)
+    elif max == 2:
+        human2.place(x=265, y=430)
+        human3.place(x=200, y=50)
+        human4.place(x=200, y=50)
+        human5.place(x=200, y=50)
+        human6.place(x=200, y=50)
+    elif max == 3:
+        human2.place(x=265, y=430)
+        human3.place(x=340, y=430)
+        human4.place(x=200, y=50)
+        human5.place(x=200, y=50)
+        human6.place(x=200, y=50)
+    elif max == 4:
+        human2.place(x=265, y=430)
+        human3.place(x=340, y=430)
+        human4.place(x=395, y=430)
+        human5.place(x=200, y=50)
+        human6.place(x=200, y=50)
+    elif max == 5:
+        human2.place(x=265, y=430)
+        human3.place(x=340, y=430)
+        human4.place(x=395, y=430)
+        human5.place(x=470, y=430)
+        human6.place(x=200, y=50)
+    elif max == 6:
+        human2.place(x=265, y=430)
+        human3.place(x=340, y=430)
+        human4.place(x=395, y=430)
+        human5.place(x=470, y=430)
+        human6.place(x=525, y=430)
+    else:
+        door.config(image = photodoor)
+        human2.place(x=200, y=50)
+        human3.place(x=200, y=50)
+        human4.place(x=200, y=50)
+        human5.place(x=200, y=50)
+        human6.place(x=200, y=50)
+
+
 ################ 접수처 (오른쪽 아래 화면)
 # 접수처 라벨
 reception_label = Label(reception, text="<접수처>", font = ('arial 18 bold'))
@@ -163,6 +240,7 @@ for r in res:
     hurt_list.place(x=330, y=60+count*30)
 
 def make_lb():
+    wait_seat()
     doc_ing = Label(tv, text = "진료중", font = ('arial 10 bold'), fg = 'red')
     doc_ing.place(x=85, y=93)
 
@@ -209,6 +287,7 @@ def make_lb():
 
 def update_db():
     global max
+    wait_seat()
     if not max==0:
         cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
         max -= 1
@@ -226,28 +305,6 @@ def update_db():
         tv.after(doctor_time, update_db)
     
 update_db()
-
-####### 진료 상황 시뮬레이터 (왼쪽 화면)
-photodoor = PhotoImage(file='./image/door.png')
-door = Label(hos_lobby, image=photodoor, width=450, height=300, bg='BLANCHEDALMOND')
-door.place(x=100, y=0)
-
-photoboard = PhotoImage(file='./image/billboard.png')
-ch1 = Label(hos_lobby, image=photoboard, width=170, height=150, bg='BLANCHEDALMOND')
-ch1.place(x=490, y=220)
-
-photohuman = PhotoImage(file='./image/human.png')
-human = Label(hos_lobby, image=photohuman, width=52, height=130, bg='BLANCHEDALMOND')
-human.place(x=200, y=430)
-
-photoch = PhotoImage(file='./image/ch1.png')
-ch1 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
-ch1.place(x=200, y=480)
-ch2 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
-ch2.place(x=330, y=480)
-ch3 = Label(hos_lobby, image=photoch, width=125, height=70, bg='BLANCHEDALMOND')
-ch3.place(x=460, y=480)
-
 
 root.mainloop()
 conn.close()
