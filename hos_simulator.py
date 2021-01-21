@@ -4,7 +4,7 @@ import datetime #날짜 생성에 필요한 패키지
 import tkinter.messagebox as msgbox #msgbox 사용을 위한 패키지
 import sqlite3
 
-# 통합화면
+####### 통합화면
 root = Tk()
 root.geometry("1200x600+0+0")
 
@@ -60,6 +60,9 @@ info_label4.place(x=30, y=150)
 info_text4.place(x=100, y=152)
 
 def tickbtn():
+    bb = cursor.execute("SELECT COUNT(*) FROM p_list")
+    vv = Label(ticket_Button, text="대기인원\n"+str(list(bb)[0][0]))
+    vv.place(x=16, y=50)
     info_text1.config(state='normal', bg='WHITE')
     info_text2.config(state='normal', bg='WHITE')
     info_text3.config(state='normal', bg='WHITE')
@@ -72,9 +75,12 @@ def chkbtn():
     getinfo4 = info_text4.get("1.0", END).replace('\n', '')
     if getinfo1=='' or getinfo2=='' or  getinfo3=='' or getinfo4=='':
         msgbox.showwarning("주의", "모든 정보를 입력해주세요.")
-    # else:
-    #     cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", ('a', 'b', 'c', 'd', nowDatetime))
-    #### 에러 발생
+    else:
+        cursor.execute("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) VALUES(?, ?, ?, ?, ?)", (getinfo1, getinfo2, getinfo3, getinfo4, nowDatetime))
+        info_text1.config(state='disabled', bg='LIGHTGRAY')
+        info_text2.config(state='disabled', bg='LIGHTGRAY')
+        info_text3.config(state='disabled', bg='LIGHTGRAY')
+        info_text4.config(state='disabled', bg='LIGHTGRAY')
 
 # 티켓 버튼
 photo_ticket = PhotoImage(file='./image/ticket.png')
@@ -82,12 +88,13 @@ ticket_Button = Button(reception, image=photo_ticket, width=130, height=145, com
 ticket_Button.place(x=350, y=30)
 
 # recep_count = cursor.execute("SELECT COUNT(*) FROM p_list")
+# recep_label = Label(ticket_Button, text="대기인원\n"+str(list(recep_count)[0][0]))
+# recep_label.place(x=16, y=50)
 
 # 체크 버튼
 photo_check = PhotoImage(file='./image/check.png')
-ticket_Button = Button(reception, image=photo_check, width=55, height=50, command=chkbtn)
-ticket_Button.place(x=275, y=120)
-
+check_Button = Button(reception, image=photo_check, width=55, height=50, command=chkbtn)
+check_Button.place(x=275, y=120)
 
 # 예약자 목록 TV화면 (오른쪽 위 화면)
 
@@ -102,10 +109,10 @@ ppList=(
 cursor.executemany("INSERT INTO p_list(pname, pbirth, psex, psym, pdate) \
     VALUES(?,?,?,?,?)", ppList)
 '''
-conn.close()
+
 
 # 진료 상황 시뮬레이터 (왼쪽 화면)
 
 
-
 root.mainloop()
+conn.close()
