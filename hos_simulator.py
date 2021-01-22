@@ -100,7 +100,7 @@ def wait_seat():
 # 안내 전광판
 def infocon(name):
     inform_label.config(text = "\n"+name+" 님\n들어오세요.\n", font = ('arial 18 bold', 14))
-    winsound.PlaySound('./sound/ddo.wav', winsound.SND_FILENAME)
+    winsound.PlaySound('./sound/bbo.wav', winsound.SND_FILENAME)
 inform_label = Label(board, text='', width=14, height=4, bg='SKYBLUE', font = ('arial 18 bold',14))
 inform_label.place(x=13, y=28)
 
@@ -266,7 +266,7 @@ def update_db():
         inform_label.config(text='')
 
     #랜덤진료시간 생성
-    doctor_time = random.randrange(5000, 6000)
+    doctor_time = random.randrange(20000, 21000)
 
     if not max==0:
         cursor.execute("DELETE FROM p_list WHERE id = ?", (id_list[0],))
